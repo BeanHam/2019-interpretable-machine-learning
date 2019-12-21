@@ -1,0 +1,466 @@
+---
+title: "Exploratory Analysis"
+author: "Bin Han"
+date: "April 27, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(tidyverse)
+library(data.table)
+```
+
+
+This file does simple exploratory data analysis of 12 text files.
+
+```{r}
+data_path = "../data/"
+```
+
+### KY1 -- defendants
+```{r}
+KY1 = as.data.frame(fread(paste0(data_path,'01_KY_Recidivism_Defendants.txt'), header = T))
+```
+
+__NOtice__:
+
+Using data.table::fread to read the data is much faster and it can automatically get rid the of NA values. 
+
+
+```{r}
+names(KY1)
+head(KY1)
+length(unique(KY1$PersonID)) == nrow(KY1)
+```
+
+1. Each record has an unique PersonaID
+2. No NA's (noticed when load the data using `fread`)
+
+
+############################################################################################
+
+### KY2 -- Interviews
+```{r}
+KY2 = as.data.frame(fread(paste0(data_path,'02_KY_Recidivism_Interviews.txt'), header = T))
+```
+
+```{r}
+names(KY2)
+
+length(unique(KY2$PersonId))
+length(unique(KY2$InterviewId))
+
+KY2 %>%
+  group_by(PersonId) %>%
+  summarize(count = n()) %>%
+  arrange(desc(count))
+
+a = KY2[KY2$PersonId == 28566, ]
+```
+
+__Notice__:
+
+Some personIDs appear more than once. 
+
+
+### Arnold (Laura and Arnold Foundation) PSA: public safety assessment
+- FTA: failure to appear
+- NCA: new criminal activity
+- NVCA: new violent criminal activity
+
+
+#### FTA
+```{r}
+### Pick FTA Features
+FTA = KY2 %>% 
+  mutate(RA2_Has_Prior_Conviction = ifelse(RA2_Has_Prior_Misdemeanor=="2" & RA2_Has_Prior_Felony == "2", 0, 
+                                    ifelse(RA2_Has_Prior_Misdemeanor == "1" |   RA2_Has_Prior_Felony=="1",1, NA)),
+         RA2_New_Charge_While_Case_Pending = ifelse(RA2_New_Charge_While_Case_Pending == "1", 1, 
+                                             ifelse(RA2_New_Charge_While_Case_Pending == "2", 0, NA)),
+         RA2_How_Many_FTA_Last_2_Yrs = ifelse(RA2_How_Many_FTA_Last_2_Yrs == "1", 0,
+                                       ifelse(RA2_How_Many_FTA_Last_2_Yrs == "2", 2,
+                                       ifelse(RA2_How_Many_FTA_Last_2_Yrs == "3", 4, NA))),
+         RA2_Has_Any_FTA_Older_2_Yrs = ifelse(RA2_Has_Any_FTA_Older_2_Yrs == "1", 1,
+                                       ifelse(RA2_Has_Any_FTA_Older_2_Yrs == "2", 0, NA))) %>%
+  select(RA2_New_Charge_While_Case_Pending, 
+         RA2_Has_Prior_Conviction, 
+         RA2_How_Many_FTA_Last_2_Yrs,
+         RA2_Has_Any_FTA_Older_2_Yrs)
+
+sum(FTA$RA2_New_Charge_While_Case_Pending == 1, na.rm = T)
+sum(FTA$RA2_Has_Prior_Conviction == 1, na.rm = T)
+sum(FTA$RA2_How_Many_FTA_Last_2_Yrs == 0, na.rm = T)
+sum(FTA$RA2_Has_Any_FTA_Older_2_Yrs == 1, na.rm = T)
+
+### Calculate Scores
+FTA$Score = apply(FTA, 1, sum)
+
+
+sum(is.na(FTA$Score))
+sum(is.na(FTA$RA2_New_Charge_While_Case_Pending))
+sum(is.na(FTA$RA2_Has_Prior_Conviction))
+sum(is.na(FTA$RA2_How_Many_FTA_Last_2_Yrs))
+sum(is.na(FTA$RA2_Has_Any_FTA_Older_2_Yrs))
+
+
+## Check FTA score from Table with calculated score
+test = data.frame(cbind(original = KY2$fta_risk_score_raw, 
+             calculated = FTA$Score)) %>% 
+  mutate(original = as.numeric(ifelse(original == "NULL", NA, as.character(original))))
+
+sum(is.na(test$original))
+sum(is.na(test$calculated))
+
+sum(test$original == test$calculated, na.rm = T)
+a =test[!(test$original == test$calculated), ]
+```
+
+__Wanring__:
+
+1. Following Beau's code, I only used RA2, which is effective from 7/1/2013 until current. (It makes sense since from the code book, the raw FTA score is only valid staring 7/1/2013)
+2. The way I calculated "Has Prior Felony or Misdemeanor" is different from Beau's method (His code has some logical problem, I think). Other features are the same. 
+3. The value of "RA2_How_Many_FTA_Last_2_Yrs" from the documentation does not match with the way how FTA score is organized. FTA uses: 0 FTA, 1 FTA, and 2 or more FTA as cut point; documentation: 0 FTA, 1 or 2 FTA, and 3 or more FTA. 
+4. The way Beau calculated FTA is simply adding all the numbers together. But according to the official FTA score calculation table, "RA2_How_Many_FTA_Last_2_Yrs" should be modified a little bit. For instance, 0 FTA - 0 point; 1 FTA - 2 points; 2 or more FTA - 4 points.
+5. There FTA provided by the table has 13 more observations that are non-missing. Out of those non-missing calculated values (777198), only 2 are different.
+
+
+#### NCA
+```{r}
+### Pick NCA Features
+NCA = KY2 %>% 
+  mutate(RA2_Age_At_Interview = ifelse(RA2_Age_At_Interview == "3", 0,
+                                ifelse(RA2_Age_At_Interview == "NULL", NA, 2)),
+         RA2_New_Charge_While_Case_Pending = ifelse(RA2_New_Charge_While_Case_Pending == "1", 3, 
+                                             ifelse(RA2_New_Charge_While_Case_Pending == "2", 0, NA)),
+         RA2_Has_Prior_Misdemeanor = ifelse(RA2_Has_Prior_Misdemeanor == "1", 1,
+                                     ifelse(RA2_Has_Prior_Misdemeanor == "2", 0, NA)),
+         RA2_Has_Prior_Felony = ifelse(RA2_Has_Prior_Felony == "1", 1,
+                                ifelse(RA2_Has_Prior_Felony == "2", 0, NA)),
+         RA2_Num_Prior_Violent = ifelse(RA2_Num_Prior_Violent == "1", 0,
+                                 ifelse(RA2_Num_Prior_Violent == "2", 1,
+                                 ifelse(RA2_Num_Prior_Violent == "3", 2, NA))),
+         RA2_How_Many_FTA_Last_2_Yrs = ifelse(RA2_How_Many_FTA_Last_2_Yrs == "1", 0,
+                                       ifelse(RA2_How_Many_FTA_Last_2_Yrs == "2", 1,
+                                       ifelse(RA2_How_Many_FTA_Last_2_Yrs == "3", 2, NA))),
+         RA2_Has_Prior_Incarceration = ifelse(RA2_Has_Prior_Incarceration == "1", 2,
+                                       ifelse(RA2_Has_Prior_Incarceration == "2", 0, NA))) %>%
+  select(RA2_Age_At_Interview, RA2_New_Charge_While_Case_Pending, RA2_Has_Prior_Felony,
+         RA2_Has_Prior_Misdemeanor, RA2_Num_Prior_Violent, RA2_How_Many_FTA_Last_2_Yrs,
+         RA2_Has_Prior_Incarceration)
+
+## Calculate unweighted Score
+NCA$Score = apply(NCA, 1, sum)
+
+sum(is.na(NCA$Score))
+sum(is.na(NCA$RA2_New_Charge_While_Case_Pending))
+sum(is.na(NCA$RA2_Age_At_Interview))
+sum(is.na(NCA$RA2_Has_Prior_Felony))
+sum(is.na(NCA$RA2_Has_Prior_Misdemeanor))
+sum(is.na(NCA$RA2_Num_Prior_Violent))
+sum(is.na(NCA$RA2_Has_Prior_Incarceration))
+sum(is.na(NCA$RA2_How_Many_FTA_Last_2_Yrs))
+
+## Compare calculated NCA with NCA from the table
+test = data.frame(cbind(original = KY2$nca_risk_score_raw,
+             calculated = NCA$Score)) %>% 
+  mutate(original = as.numeric(ifelse(original == "NULL", NA, as.character(original))))
+
+sum(is.na(test$original))
+sum(is.na(test$calculated))
+
+sum(test$original == test$calculated, na.rm = T)
+```
+
+__Warning__:
+
+1. Same issue as FTA: "RA2_How_Many_FTA_Last_2_Yrs" documented score does not match with the official calculation.
+2. The calculated score has over 100,000 NA's more than the provided row NCA score. And the two variables barely have the same score for each individual.
+
+#### NVCA: New Violent Criminal Activity
+```{r}
+### pick up NVCA features
+NVCA = KY2 %>% 
+  mutate(RA2_Current_Charge_Violent = ifelse(RA2_Current_Charge_Violent == "2", 0, 
+                                      ifelse(RA2_Current_Charge_Violent == "1", 2, NA)),
+         RA2_Violent_and_under_21 = ifelse(RA2_Violent_and_under_21 == "2", 0,
+                                    ifelse(RA2_Violent_and_under_21 == "1", 1, NA)),
+         RA2_New_Charge_While_Case_Pending = ifelse(RA2_New_Charge_While_Case_Pending == "2", 0,
+                                             ifelse(RA2_New_Charge_While_Case_Pending == "1",1, NA)),
+         RA2_Has_Prior_Conviction = ifelse(RA2_Has_Prior_Misdemeanor=="2" & RA2_Has_Prior_Felony == "2", 0, 
+                                    ifelse(RA2_Has_Prior_Misdemeanor == "1" |   RA2_Has_Prior_Felony=="1", 1, NA)),
+         RA2_Num_Prior_Violent = ifelse(RA2_Num_Prior_Violent == "1", 0,
+                                 ifelse(RA2_Num_Prior_Violent == "2", 1,
+                                 ifelse(RA2_Num_Prior_Violent == "3", 2, NA)))) %>% 
+  select(RA2_Current_Charge_Violent, 
+         RA2_Violent_and_under_21,
+         RA2_New_Charge_While_Case_Pending,
+         RA2_Has_Prior_Conviction,
+         RA2_Num_Prior_Violent)
+
+## NVCA unweighted score
+NVCA$Score = apply(NVCA, 1, sum)
+
+sum(is.na(NVCA$RA2_Current_Charge_Violent))
+sum(is.na(NVCA$RA2_Violent_and_under_21))
+sum(is.na(NVCA$RA2_New_Charge_While_Case_Pending))
+sum(is.na(NVCA$RA2_Has_Prior_Conviction))
+sum(is.na(NVCA$RA2_Num_Prior_Violent))
+sum(is.na(NVCA$Score))
+
+## Compare calculated NCA with NCA from the table
+test = data.frame(cbind(original = KY2$pvf_risk_score_raw,
+             calculated = NVCA$Score)) %>% 
+  mutate(original = as.numeric(ifelse(original == "NULL", NA, as.character(original))))
+
+sum(!is.na(test$original))
+sum(!is.na(test$calculated))
+sum(test$original == test$calculated, na.rm = T)
+```
+
+__Warning__:
+1. Our calculated score has 777194 NA's, while the original score has 777213. 19 records gap.
+But using all the non-NA calculated score to compare, we have 771127 same scores (6067 difference).
+
+The question is: which one to use?
+
+#### Combine all the scores
+```{r}
+Scores = data.frame(
+  FTA = FTA$Score,
+  NCA = NCA$Score,
+  NVCA = NVCA$Score
+)
+
+Scores$all_na = apply(Scores,1,function(x) all(is.na(x)))
+Scores$any_na = apply(Scores,1,function(x) any(is.na(x)))
+
+df = Scores %>%
+  filter(!any_na) %>%
+  select(FTA,NCA,NVCA) %>%
+  mutate_all(as.factor)
+
+ggpairs(df)
+
+```
+
+__Summary__:
+
+1. Compared with Compass data, we already have all the features and FTA, NCA, NVCA scores (even though need some clarification)
+2. For riskSLIM data structure or format, we dont have features like "jail30", "p_drug", "p_traffic" etc. yet. 
+
+
+#################################################################################
+### KY3 - 
+```{r}
+KY3 = as.data.frame(fread(paste0(data_path,'03_KY_Recidivism_CNet_Cases.txt'), header = T))
+```
+
+```{r}
+names(KY3)
+```
+
+```{r}
+names(KY3)
+
+### Check PersonID
+length(unique(KY3$PersonID))
+length(unique(KY3$SeqCaseID))
+
+
+KY3 %>%
+  group_by(PersonID)%>%
+  summarize(count = n()) %>%
+  arrange(desc(count))
+
+a = KY3[KY3$PersonID == "19143", ]
+```
+
+__Warning__:
+
+One PersonID could appear multiple times. But SeqCaseID is unique for each record. And multiple PRIM cases could link to the same SeqCaseID.
+
+
+############################################################################################
+### KY4 - PRIM Cases
+```{r}
+KY4 = as.data.frame(fread(paste0(data_path,'04_KY_Recidivism_PRIM_Cases.txt'), header = T))
+```
+
+```{r}
+names(KY4)
+```
+
+```{r}
+length(unique(KY4$PersonID))
+length(unique(KY4$InterviewID))
+length(unique(KY4$SeqCaseId))
+length(unique(KY4$CaseID))
+```
+
+## same personID, same interviewID, same SeqCaseID, differnt CaseID
+```{r}
+KY4 %>% 
+  group_by(PersonID, InterviewID, SeqCaseId) %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count))
+```
+
+```{r}
+a = KY4[KY4$PersonID == "409241", ]
+b = KY4[KY4$PersonID == "97603" & KY4$SeqCaseId == "1440979", ]
+c = KY4[KY4$PersonID == "358053", ]
+d = KY4[KY4$PersonID == "365361" & KY4$SeqCaseId == "1466009", ]
+e = KY4[KY4$PersonID == "128242" & KY4$SeqCaseId == "489665", ]
+```
+
+## same PersonID, same SeqCaseID, different interviewID, different CaseID
+```{r}
+KY4 %>% 
+  group_by(PersonID, SeqCaseId) %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count))
+```
+
+```{r}
+f = KY4[KY4$PersonID == "152948" & KY4$SeqCaseId == "913837", ]
+g = comb2[comb2$PersonID == "152948" & comb2$SeqCaseID == "913837", ]
+```
+
+
+```{r}
+
+comb2 %>% 
+  group_by(PersonID, SeqCaseID) %>% 
+  summarise(count = n()) %>% 
+  arrange(desc(count)) %>% 
+  .[1:5, ]
+
+
+t = CNet_charges[CNet_charges$PersonID == "409581" & CNet_charges$SeqCaseID == "1715219", ]
+h = comb2[comb2$PersonID == "409581" & comb2$SeqCaseID == "1715219", ]
+```
+
+
+
+## same PersonID, different other IDs
+```{r}
+d = KY4[KY4$PersonID == "152948", ]
+```
+
+
+
+__Warning__:
+
+Each person could have more than one interview. CaseID is unique in KY4 as it repsents the case-level record in PRIM. SeqCaseID's are not unique. 
+
+
+############################################################################################
+### KY5 - PRIM Case_Cross_Reference
+```{r}
+KY5 = as.data.frame(fread(paste0(data_path,'05_KY_Recidivism_Case_Cross_Reference.txt'), header = T))
+```
+
+```{r}
+names(KY5)
+```
+
+############################################################################################
+### KY6 - CourtNet Charges
+```{r}
+KY6 = as.data.frame(fread(paste0(data_path,'06_KY_Recidivism_CNet_Charges.txt'), header = T))
+```
+
+```{r}
+names(KY6)
+head(KY6)
+
+length(unique(KY6$SeqCaseID))
+length(unique(KY6$PersonId))
+```
+
+
+############################################################################################
+### KY7 - PRIM Charges
+```{r}
+KY7 = as.data.frame(fread(paste0(data_path,'07_KY_Recidivism_PRIM_Charges.txt'), header = T))
+```
+
+############################################################################################
+### KY8 - Sentences
+```{r}
+KY8 = as.data.frame(fread(paste0(data_path,'08_KY_Recidivism_Sentences.txt'), header = T))
+```
+
+```{r}
+names(KY8)
+head(KY8)
+```
+
+############################################################################################
+### KY9 - Bonds
+```{r}
+KY9 = as.data.frame(fread(paste0(data_path,'09_KY_Recidivism_Bonds.txt'), header = T))
+```
+
+```{r}
+names(KY9)
+```
+
+```{r}
+head(KY9)
+```
+
+```{r}
+length(unique(KY9$PersonId))
+length(unique(KY9$interviewID))
+length(unique(KY9$CaseId))
+length(unique(KY9$BondID))
+
+```
+
+```{r}
+a = KY9 %>% select(interviewID, BondID, BondDate, IsReleased)
+```
+
+
+############################################################################################
+### KY10 - Events
+```{r}
+KY10 = as.data.frame(fread(paste0(data_path,'10_KY_Recidivism_Events.txt'), header = T))
+```
+
+```{r}
+names(KY10)
+```
+
+```{r}
+head(KY10)
+```
+
+############################################################################################
+### KY11 - FTA
+```{r}
+KY11 = as.data.frame(fread(paste0(data_path,'11_KY_Recidivism_FTA.txt'), header = T))
+```
+
+```{r}
+head(KY11)
+```
+
+############################################################################################
+### KY12 - Events
+```{r}
+KY12 = as.data.frame(fread(paste0(data_path,'12_KY_Recidivism_Supervision.txt'), header = T))
+```
+
+
+```{r}
+write.csv(train, file = "train.csv")
+write.csv(test, file = "test.csv")
+```
+

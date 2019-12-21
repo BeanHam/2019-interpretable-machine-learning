@@ -1,0 +1,73 @@
+Problem,Performance,Model,Time
+General,0.62,CART,Two Year
+General,0.661,EBM,Two Year
+General,0.653,L1 Stumps,Two Year
+General,0.626,RiskSLIM,Two Year
+General,0.605,Arnold PSA,Two Year
+General,0.631,COMPAS,Two Year
+Violent,0.621,CART,Two Year
+Violent,0.675,EBM,Two Year
+Violent,0.669,L1 Stumps,Two Year
+Violent,0.651,RiskSLIM,Two Year
+Violent,0.628,Arnold PSA,Two Year
+Violent,0.639,COMPAS,Two Year
+Drug,0.654,CART,Two Year
+Drug,0.684,EBM,Two Year
+Drug,0.719,L1 Stumps,Two Year
+Drug,0.696,RiskSLIM,Two Year
+Drug,0,Arnold PSA,Two Year
+Drug,0,COMPAS,Two Year
+Property,0.684,CART,Two Year
+Property,0.739,EBM,Two Year
+Property,0.742,L1 Stumps,Two Year
+Property,0.719,RiskSLIM,Two Year
+Property,0,Arnold PSA,Two Year
+Property,0,COMPAS,Two Year
+Felony,0.595,CART,Two Year
+Felony,0.655,EBM,Two Year
+Felony,0.627,L1 Stumps,Two Year
+Felony,0.618,RiskSLIM,Two Year
+Felony,0,Arnold PSA,Two Year
+Felony,0,COMPAS,Two Year
+Misdemeanor,0.567,CART,Two Year
+Misdemeanor,0.634,EBM,Two Year
+Misdemeanor,0.618,L1 Stumps,Two Year
+Misdemeanor,0.568,RiskSLIM,Two Year
+Misdemeanor,0,Arnold PSA,Two Year
+Misdemeanor,0,COMPAS,Two Year
+General,0.561,CART,Six Month
+General,0.622,EBM,Six Month
+General,0.619,L1 Stumps,Six Month
+General,0.584,RiskSLIM,Six Month
+General,0.577,Arnold PSA,Six Month
+General,0.609,COMPAS,Six Month
+Violent,0.627,CART,Six Month
+Violent,0.675,EBM,Six Month
+Violent,0.674,L1 Stumps,Six Month
+Violent,0.679,RiskSLIM,Six Month
+Violent,0.675,Arnold PSA,Six Month
+Violent,0.609,COMPAS,Six Month
+Drug,0.569,CART,Six Month
+Drug,0.671,EBM,Six Month
+Drug,0.692,L1 Stumps,Six Month
+Drug,0.651,RiskSLIM,Six Month
+Drug,0,Arnold PSA,Six Month
+Drug,0,COMPAS,Six Month
+Property,0.635,CART,Six Month
+Property,0.724,EBM,Six Month
+Property,0.713,L1 Stumps,Six Month
+Property,0.723,RiskSLIM,Six Month
+Property,0,Arnold PSA,Six Month
+Property,0,COMPAS,Six Month
+Felony,0.508,CART,Six Month
+Felony,0.608,EBM,Six Month
+Felony,0.583,L1 Stumps,Six Month
+Felony,0.587,RiskSLIM,Six Month
+Felony,0,Arnold PSA,Six Month
+Felony,0,COMPAS,Six Month
+Misdemeanor,0.54,CART,Six Month
+Misdemeanor,0.605,EBM,Six Month
+Misdemeanor,0.587,L1 Stumps,Six Month
+Misdemeanor,0.57,RiskSLIM,Six Month
+Misdemeanor,0,Arnold PSA,Six Month
+Misdemeanor,0,COMPAS,Six Month

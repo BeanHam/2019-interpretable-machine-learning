@@ -1,0 +1,90 @@
+# make Broward/Kentucky consistent, store numerical encodings of categorical labels
+decoders: 
+  sex: 
+    1: "male"
+    0: "female" 
+  race: 
+    # kentucky
+    White: "Caucasian"
+    Black: "African-American"
+    Race Unknown: "Other" # indian or native american?
+    Indian: "Other"
+    # broward & kentucky
+    Asian: "Other"
+    # broward
+    Native American: "Other"
+
+  label:
+    # broward and kentucky
+    recid_two_year: "general_two_year"
+    recid_six_month: "general_six_month"
+    #broward only
+    recid_drug2: "drug_two_year"
+    recid_property2: "property_two_year"
+    recid_M2: "misdemeanor_two_year"
+    recid_F2: "felony_two_year"
+    recid_violent2: "violent_two_year"
+
+    recid_drug6: "drug_six_month"
+    recid_property6: "property_six_month"
+    recid_M6: "misdemeanor_six_month"
+    recid_F6: "felony_six_month"
+    recid_violent6: "violent_six_month"
+    #kentucky
+    recid_drug_two_year: "drug_two_year"
+    recid_property_two_year: "property_two_year"
+    recid_M_two_year: "misdemeanor_two_year"
+    recid_F_two_year: "felony_two_year"
+    recid_violence_two_year: "violent_two_year"
+
+    recid_drug_six_month: "drug_six_month"
+    recid_property_six_month: "property_six_month"
+    recid_M_six_month: "misdemeanor_six_month"
+    recid_F_six_month: "felony_six_month"
+    recid_violence_six_month: "violent_six_month"
+
+  arnold_name:
+    fta_risk_score_raw: arnold_fta_raw
+    nca_risk_score_raw: arnold_nca_raw
+    pvf_risk_score_raw: arnold_nvca_raw
+
+labels: ['general_two_year', 'general_six_month',
+        'drug_two_year','property_two_year', 'misdemeanor_two_year', 'felony_two_year',  'violent_two_year',
+        'drug_six_month', 'property_six_month', 'misdemeanor_six_month', 'felony_six_month', 'violent_six_month']
+
+# source: https://www.psapretrial.org/about/factors
+arnold_nca_scaler:
+    0: "1"
+    1: "2"
+    2: "2"
+    3: "3"
+    4: "3"
+    5: "4"
+    6: "4"
+    7: "5"
+    8: "5"
+    9: "6"
+    10: "6"
+    11: "6"
+    12: "6"
+    13: "6"
+
+arnold_fta_scaler:
+    0: "1"
+    1: "2"
+    2: "3"
+    3: "4"
+    4: "4"
+    5: "5"
+    6: "5"
+    7: "6"
+
+arnold_nvca_scaler:
+    0: "No"
+    1: "No"
+    2: "No"
+    3: "No"
+    4: "Yes"
+    5: "Yes"
+    6: "Yes"
+    7: "Yes"

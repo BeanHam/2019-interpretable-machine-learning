@@ -1,0 +1,13 @@
+label,base_rate
+general_two_year,0.297
+drug_two_year,0.125
+violent_two_year,0.071
+felony_two_year,0.14
+misdemeanor_two_year,0.227
+property_two_year,0.063
+general_six_month,0.123
+drug_six_month,0.043
+violent_six_month,0.027
+felony_six_month,0.052
+misdemeanor_six_month,0.082
+property_six_month,0.022
