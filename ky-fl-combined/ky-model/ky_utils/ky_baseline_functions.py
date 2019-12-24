@@ -123,7 +123,7 @@ def LinearSVM(KY_x, KY_y, FL_x, FL_y, C, seed):
     FL_x = FL_x.drop(['person_id'], axis=1)
     
     ### model & parameters
-    svm = LinearSVC(dual=False, max_iter=2e6, random_state=seed)
+    svm = LinearSVC(dual=False, max_iter=1e8, random_state=seed)
     c_grid = {"C": C}
 
     ## cross validation set up 
