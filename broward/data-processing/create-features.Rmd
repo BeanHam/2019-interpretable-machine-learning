@@ -199,7 +199,7 @@ write.csv(arnold_train, file = "broward_arnold_train.csv", row.names = F)
 write.csv(arnold_test, file = "broward_arnold_test.csv", row.names = F)
 
 ## index
-write.csv(psa_test_sample, file = "broward_test_index.csv", row.names = F)
+#write.csv(psa_test_sample, file = "broward_test_index.csv", row.names = F)
 ```
 
 
