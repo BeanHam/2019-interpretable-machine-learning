@@ -296,7 +296,7 @@ __NOTE__:
 "data_before" is the criminal history data, including charges, cases, jail, prison, probation etc., before the current offense date.
 
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 ### Compute features (e.g., number of priors) for each person_id/screening_date combination.
 features = pmap_dfr(data_before, .f=compute_features)
 year_feature = pmap_dfr(data_before, .f=compute_past_crimes)
@@ -372,7 +372,7 @@ __NOTE__:
 
 "data_before_on" is the criminal history data including the current offense date.
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 ### Compute features (e.g., number of priors) for each person_id/screening_date combination.
 features_before_on = pmap_dfr(data_before_on, .f=compute_features)
 
@@ -570,8 +570,8 @@ save(data_before, data_on, data_after, data_before_on,
      features, features_before_on, features_on, outcomes,  
      compas_df_wide,
      current_offense_date_limit,
-     file = "C:/Users/binha/Documents/Duke/Cynthia Research/KY-analysis-mytrials/broward/data/expanded_features.Rdata")
+     file = "expanded_features.Rdata")
 
-write.csv(outcomes, file = "C:/Users/binha/Documents/Duke/Cynthia Research/KY-analysis-mytrials/broward/data/labels.csv", row.names = FALSE)
+write.csv(outcomes, file = "labels.csv", row.names = FALSE)
 ```
 
