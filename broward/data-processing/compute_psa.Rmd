@@ -284,7 +284,6 @@ compas_psa_wide=psa_features%>%
 
 ```{r}
 save(compas_psa_wide, psa_features, outcomes,
-     file = "compas_psa.Rdata") 
-
+     file = "compas_psa.Rdata")
 ```
 

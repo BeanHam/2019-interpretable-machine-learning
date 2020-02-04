@@ -19,10 +19,10 @@ require(caret)
 
 
 ```{r}
-data_path = "C:/Users/binha/Documents/Duke/Cynthia Research/KY-analysis-mytrials/broward/data/"
+data_path = "C:/Users/binha/Documents/Duke/Cynthia Research/interpretable-machine-learning/broward/data-processing/"
 load(paste0(data_path, "compas_psa.Rdata"))
 load(paste0(data_path, "expanded_features.Rdata"))
-labels = read_csv("~/Duke/Cynthia Research/KY-analysis-mytrials/broward/data/labels.csv") %>% 
+labels = read_csv(paste0(data_path, "labels.csv")) %>% 
     mutate(screening_date = as.Date(screening_date, format = "%m/%d/%Y"))
 ```
 
@@ -183,119 +183,24 @@ psa_test = df_psa[psa_test_sample,]
 psa_train = df_psa[-psa_test_sample, ]
 arnold_test = scores_outcomes[psa_test_sample, ]
 arnold_train = scores_outcomes[-psa_test_sample, ]
-
 ```
+
 
 ## save data
 ```{r}
+saving_path = "C:/Users/binha/Documents/Duke/Cynthia Research/interpretable-machine-learning/broward/data/"
+
 ## psa subset
-write.csv(df_psa, file = "broward_data.csv", row.names = F)
-write.csv(psa_train, file = "broward_train.csv", row.names = F)
-write.csv(psa_test, file = "broward_test.csv", row.names = F)
+write.csv(df_psa, file = paste0(saving_path, "broward_data.csv"), row.names = F)
+write.csv(psa_train, file = paste0(saving_path, "broward_train.csv"), row.names = F)
+write.csv(psa_test, file = paste0(saving_path, "broward_test.csv"), row.names = F)
 
 ## psa scores
-write.csv(scores_outcomes, file = "broward_arnold.csv", row.names = F)
-write.csv(arnold_train, file = "broward_arnold_train.csv", row.names = F)
-write.csv(arnold_test, file = "broward_arnold_test.csv", row.names = F)
+write.csv(scores_outcomes, file = paste0(saving_path, "broward_arnold.csv"), row.names = F)
+write.csv(arnold_train, file = paste0(saving_path, "broward_arnold_train.csv"), row.names = F)
+write.csv(arnold_test, file = paste0(saving_path, "broward_arnold_test.csv"), row.names = F)
 
 ## index
-#write.csv(psa_test_sample, file = "broward_test_index.csv", row.names = F)
+write.csv(psa_test_sample, file = paste0(saving_path, "broward_test_index.csv"), row.names = F)
 ```
-
-
-
-
-
-
-
-
-
-
-### appendix -- full data
-```{r}
-###########################################################
-df_full = features_filt %>%
-  transmute(
-    person_id,
-    sex,
-    race,
-    screening_date,
-    
-    #COMPAS Risk of Recidivism Features\
-    age_at_current_charge,
-    age_at_first_charge,
-    p_charges,
-    p_incarceration = p_incarceration,
-    p_probation = p_probation,
-    
-    #COMPAS Risk of violent recidivism features
-    p_juv_fel_count,
-    p_felprop_viol,
-    p_murder,
-    p_felassault,
-    p_misdeassault,
-    p_famviol,
-    p_sex_offense,
-    p_weapon,
-    
-    #Misc Features
-    p_arrest,
-    p_property,
-    p_traffic,
-    p_drug,
-    p_dui,
-    p_domestic,
-    p_stalking,
-    p_voyeurism,
-    p_fraud,
-    p_stealing,
-    p_trespass,
-    six_month,
-    one_year,
-    three_year,
-    five_year) %>%
-  na.omit()
-```
-
-```{r}
-#### full
-df_full = merge(x=df_full, y =labels, by=c('person_id', 'screening_date'))%>% 
-    select(person_id:general_six_month, 
-           drug_two_year, 
-           property_two_year,
-           misdemeanor_two_year,
-           felony_two_year,
-           violent_two_year,           
-           drug_six_month, 
-           property_six_month,
-           misdemeanor_six_month,
-           felony_six_month,
-           violent_six_month)%>% 
-    mutate(general_two_year = as.factor(general_two_year),
-           drug_two_year = as.factor(drug_two_year),
-           property_two_year = as.factor(property_two_year),
-           felony_two_year = as.factor(felony_two_year),
-           misdemeanor_two_year = as.factor(misdemeanor_two_year),
-           violent_two_year = as.factor(violent_two_year),
-           general_six_month = as.factor(general_six_month),
-           drug_six_month = as.factor(drug_six_month),
-           property_six_month = as.factor(property_six_month),
-           felony_six_month = as.factor(felony_six_month),
-           misdemeanor_six_month = as.factor(misdemeanor_six_month),
-           violent_six_month = as.factor(violent_six_month))
-```
-
-
-```{r}
-### 
-full_test_sample = sample(1:nrow(df_full), 0.2*nrow(df_full), replace = FALSE)
-full_test = df_full[full_test_sample, ]
-full_train = df_full[-full_test_sample, ]
-
-## full data
-write.csv(df_full, file = "broward_full_data.csv", row.names = F)
-write.csv(full_train, file = "broward_full_train.csv", row.names = F)
-write.csv(full_test, file = "broward_full_test.csv", row.names = F)
-```
-
 
