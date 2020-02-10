@@ -6,7 +6,6 @@ from utils.plotting_helpers import safe_save_plt
 
 
 def prob_recid_conditioned_sensitive_attr(df:pd.DataFrame, 
-                                          attribute:str, 
                                           dataset_name:str,
                                           save_path:None):
     """
@@ -14,13 +13,12 @@ def prob_recid_conditioned_sensitive_attr(df:pd.DataFrame,
     """
 
     # cast df from long to wide with each attribute being a different column 
-    wide_df = (df[df["Attribute"] == attribute]
-                .pivot(index='label', 
+    wide_df = (df.pivot(index='label', 
                        columns='Attribute Value', 
                        values=[ 'P(Y = 1 | Attr = attr)']))
     
     # get a list of unique columns
-    attribute_values = df[df["Attribute"] == attribute ]["Attribute Value"].unique()
+    attribute_values = df["Attribute Value"].unique()
     
     # set width of bar
     barWidth = 0.15
@@ -44,9 +42,19 @@ def prob_recid_conditioned_sensitive_attr(df:pd.DataFrame,
     plt.figure(figsize=(10, 5))
     plt.style.use('ggplot')
     
-    colors = ['cornflowerblue', 'lightslategrey', 'lightskyblue', 'steelblue']
+    colors = {"African-American": 'cornflowerblue',
+              "Other": 'lightslategrey',
+              "Caucasian": 'steelblue',
+              "female": 'lightcoral', 
+              "male": 'pink'}
+
     for i, (bar_name, bar_dict) in enumerate(bars.items()):
-        plt.bar(bar_dict["pos"], bar_dict["bar"], color=colors[i], width=barWidth, edgecolor='white', label=bar_name)
+        plt.bar(bar_dict["pos"], 
+        		bar_dict["bar"], 
+        		color=colors[bar_name], 
+        		width=barWidth, 
+        		edgecolor='white', 
+        		label=bar_name)
 
     # Add xticks on the middle of the group bars
     plt.xlabel('Prediction Problem', fontweight='bold')
@@ -58,7 +66,7 @@ def prob_recid_conditioned_sensitive_attr(df:pd.DataFrame,
 
     # Create legend, add title, & show/save graphic
     plt.legend()
-    plt.title(f'Probability of recidivism (conditioned on {attribute}) is not the same for \nany prediction problem on {dataset_name}')
+    plt.title(f'Cond. prob. of recidivism for all \nprediction problems on {dataset_name}')
     
     if save_path is not None: 
         safe_save_plt(plt, save_path)
@@ -211,6 +219,7 @@ def plot_binary_calib_arnold_nvca(calib:pd.DataFrame,
         prev_bar_name = bar_name 
 
     colors = ['cornflowerblue', 'lightslategrey', 'lightskyblue', 'steelblue']
+
     for i, (bar_name, bar_dict) in enumerate(bars.items()):
         plt.bar(bar_dict["pos"], 
                 bar_dict["bar"], 
