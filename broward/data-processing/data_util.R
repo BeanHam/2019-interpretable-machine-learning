@@ -79,7 +79,7 @@ compute_features = function(person_id,screening_date,first_offense_date,current_
   
   # Number of charges / arrests
   out$p_charges = ifelse(is.null(charge), 0, nrow(charge))
-  out$p_arrest = ifelse(is.null(arrest), 0, nrow(arrest))
+  out$p_arrest = ifelse(is.null(arrest), 0, length(unique(arrest$arrest_date)))
   
   # Number of times sentenced to jail/prison 30 days or more
   out$p_jail30 = ifelse(is.null(jail), 0, sum(jail$sentence_days >= 30, na.rm=TRUE))
@@ -237,7 +237,8 @@ compute_outcomes = function(person_id,screening_date,first_offense_date,current_
     years_next_offense = as.numeric(as.period(interval(screening_date,date_next_offense)), "years")
     years_next_offense[is.na(years_next_offense)] = 0
     out$years = years_next_offense
-
+    
+    # compute recidivism within 2 years and within 6 months
     out$general_two_year = if_else(years_next_offense <= 2 & years_next_offense > 0, 1, 0) 
     out$general_six_month = if_else(years_next_offense <= 0.5 & years_next_offense > 0, 1, 0)
     out$recidnot = as.numeric(!out$general_two_year)
