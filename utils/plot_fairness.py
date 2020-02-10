@@ -113,10 +113,25 @@ def plot_calibration_for_score_on_problem(calib: pd.DataFrame,
                      color=colors[i], marker='o', linewidth=1, markersize=4,
                      label=name)
 
+    # format the score name for display in plot labels
+    score_name_mapper = {"ebm": "EBM", 
+                         "riskslim_cs": "RiskSLIM (con.)", 
+                         "riskslim": "RiskSLIM", 
+                         "stumps": "Additive Stumps", 
+                         "arnold_nca": "Arnold NCA",
+                         "arnold_nca_raw": "Arnold NCA Raw", 
+                         "arnold_nvca_raw": "Arnold NVCA Raw", 
+                         }
+
+    try:
+        score_name_formatted = score_name_mapper[score_name]
+    except: 
+        score_name_formatted = score_name
+
     # axes settings
     if xtick_labels is not None:
         plt.xticks(np.arange(len(xtick_labels)), xtick_labels)
-    plt.xlabel(f"{score_name} score", fontsize=25)
+    plt.xlabel(f"{score_name_formatted} Score", fontsize=25)
 
     plt.ylim(0,1)
     plt.ylabel('P(Y = 1 | Score = score, \nAttr = attr)', fontsize=25)
@@ -124,7 +139,8 @@ def plot_calibration_for_score_on_problem(calib: pd.DataFrame,
     # Create legend, add title, format & show/save graphic
     if include_legend:
         plt.legend(fontsize=20, ncol=2, framealpha=0.3)
-    plt.title(f'Calib. of {score_name} on \n{problem_name} in {region}', fontsize=25)
+
+    plt.title(f'Calib. of {score_name_formatted} on \n{problem_name} in {region}', fontsize=25)
 
     if rotate_xticks:
         plt.tick_params(axis="x", labelsize=20, rotation=25)
@@ -207,11 +223,12 @@ def plot_binary_calib_arnold_nvca(calib:pd.DataFrame,
     plt.xlabel('Sensitive Attribute', fontsize=25)
     plt.xticks([r + barWidth for r in range(bar_len)], wide_df.index, rotation=45, fontsize=20)
 
-    plt.ylim(0,1)
+    plt.ylim(0,.3)
     plt.ylabel('P(Y = 1 | Score = score, \nAttr = attr)\n', fontsize=25)
+    plt.tick_params(axis="y", labelsize=25)
 
     # Create legend, add title, format & show/save graphic
-    plt.title(f"Calibration (Cond. Use Acc. Eq.) of \narnold_nvca on violent_two_year in {region_name}", fontsize=30)
+    plt.title(f"Calibration (Cond. Use Acc. Eq.) of \narnold_nvca on violent_two_year in {region_name}\n", fontsize=25)
     plt.legend(fontsize=20)
 
     if save_path is not None: 
@@ -288,11 +305,12 @@ def plot_eq_odds_arnold_nvca(eq_odds:pd.DataFrame,
     plt.xlabel('Sensitive Attribute', fontsize=25)
     plt.xticks([r + barWidth for r in range(bar_len)], wide_df.index, rotation=45, fontsize=20)
 
-    plt.ylim(0,1)
+    plt.ylim(0,.6)
     plt.ylabel('P(Score = Yes | Y = i, \nAttr = attr)\n', fontsize=25)
+    plt.tick_params(axis="y", labelsize=25)
 
     # Create legend, add title, format & show/save graphic
-    plt.title(f"BPC/BNC (Eq. odds) of arnold_nvca \non violent_two_year in {region_name}", fontsize=30)
+    plt.title(f"BPC/BNC (Eq. odds) of arnold_nvca \non violent_two_year in {region_name}\n", fontsize=25)
     plt.legend(fontsize=20)
 
     if save_path is not None: 
