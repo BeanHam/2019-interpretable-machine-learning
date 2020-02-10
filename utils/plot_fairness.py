@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from utils.plotting_helpers import safe_save_plt
 
 
+
 def prob_recid_conditioned_sensitive_attr(df:pd.DataFrame, 
                                           dataset_name:str,
                                           save_path:None):
@@ -39,7 +40,7 @@ def prob_recid_conditioned_sensitive_attr(df:pd.DataFrame,
         prev_bar_name = bar_name 
 
     # Make the plot
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(9, 5.5))
     plt.style.use('ggplot')
     
     colors = {"African-American": 'cornflowerblue',
@@ -50,23 +51,24 @@ def prob_recid_conditioned_sensitive_attr(df:pd.DataFrame,
 
     for i, (bar_name, bar_dict) in enumerate(bars.items()):
         plt.bar(bar_dict["pos"], 
-        		bar_dict["bar"], 
-        		color=colors[bar_name], 
-        		width=barWidth, 
-        		edgecolor='white', 
-        		label=bar_name)
+                bar_dict["bar"], 
+                color=colors[bar_name], 
+                width=barWidth, 
+                edgecolor='white', 
+                label=bar_name)
 
     # Add xticks on the middle of the group bars
-    plt.xlabel('Prediction Problem', fontweight='bold')
-    plt.xticks([r + barWidth for r in range(bar_len)], wide_df.index, rotation=45)
+    plt.xlabel('Prediction Problem', fontsize=20)
+    plt.xticks([r+barWidth for r in range(bar_len)], wide_df.index, rotation=30, fontsize=12, ha='right')
 
     # Limit y axis to 0,1 
-    plt.ylim(0,1)
-    plt.ylabel('P(Y = 1 | Attr = attr)', fontweight='bold')
+    plt.ylim(0,.3)
+    plt.ylabel('P(Y = 1 | Attr = attr)',  fontsize=20)
+    plt.tick_params(axis="y", labelsize=14)
 
     # Create legend, add title, & show/save graphic
-    plt.legend()
-    plt.title(f'Cond. prob. of recidivism for all \nprediction problems on {dataset_name}')
+    plt.legend(fontsize=12, ncol=2)
+    plt.title(f'Cond. prob. of recidivism for all \nprediction problems on {dataset_name}', fontsize=20)
     
     if save_path is not None: 
         safe_save_plt(plt, save_path)
