@@ -1,7 +1,0 @@
-,Model,Label,Afr-Am.,Cauc.,Hisp.,Other Race,race_range,Female,Male,sex_range
-0,Arnold NCA,general\_two\_year,0.586,0.602,0.566,0.641,0.076,0.636,0.594,0.042
-1,Arnold NVCA Raw,violent\_two\_year,0.601,0.731,0.756,0.657,0.155,0.71,0.639,0.072
-0,COMPAS General,general\_two\_year,0.624,0.645,0.531,0.593,0.114,0.685,0.625,0.061
-1,COMPAS Viol.,violent\_two\_year,0.633,0.642,0.574,0.658,0.084,0.618,0.637,0.019
-0,EBM,general\_two\_year,0.659,0.655,0.63,0.58,0.079,0.708,0.649,0.059
-1,EBM,violent\_two\_year,0.657,0.711,0.765,0.663,0.109,0.683,0.668,0.014
