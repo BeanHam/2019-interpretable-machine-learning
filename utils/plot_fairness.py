@@ -231,15 +231,15 @@ def plot_binary_calib_arnold_nvca(calib:pd.DataFrame,
                 label=f"P(Y=1 | score={bar_name}, Attr=attr")
 
     # Add xticks on the middle of the group bars
-    plt.xlabel('Sensitive Attribute', fontsize=25)
-    plt.xticks([r + barWidth for r in range(bar_len)], wide_df.index, rotation=45, fontsize=20)
+    plt.xlabel('Sensitive Attribute', fontsize=30)
+    plt.xticks([r + barWidth for r in range(bar_len)], wide_df.index, rotation=45, fontsize=25)
 
     plt.ylim(0,.3)
-    plt.ylabel('P(Y = 1 | Score = score, \nAttr = attr)\n', fontsize=25)
+    plt.ylabel('P(Y = 1 | Score = score, \nAttr = attr)\n', fontsize=30)
     plt.tick_params(axis="y", labelsize=25)
 
     # Create legend, add title, format & show/save graphic
-    plt.title(f"Calibration (Cond. Use Acc. Eq.) of \narnold_nvca on violent_two_year in {region_name}\n", fontsize=25)
+    plt.title(f"Calibration (Cond. Use Acc. Eq.) of \narnold_nvca on violent_two_year in {region_name}\n", fontsize=30)
     plt.legend(fontsize=20)
 
     if save_path is not None: 
@@ -313,15 +313,15 @@ def plot_eq_odds_arnold_nvca(eq_odds:pd.DataFrame,
                 label=f"P(Score=Yes | Y={bar_name}, Attr=attr)")
 
     # Add xticks on the middle of the group bars
-    plt.xlabel('Sensitive Attribute', fontsize=25)
-    plt.xticks([r + barWidth for r in range(bar_len)], wide_df.index, rotation=45, fontsize=20)
+    plt.xlabel('Sensitive Attribute', fontsize=30)
+    plt.xticks([r + barWidth for r in range(bar_len)], wide_df.index, rotation=45, fontsize=25)
 
     plt.ylim(0,.6)
-    plt.ylabel('P(Score = Yes | Y = i, \nAttr = attr)\n', fontsize=25)
+    plt.ylabel('P(Score = Yes | Y = i, \nAttr = attr)\n', fontsize=30)
     plt.tick_params(axis="y", labelsize=25)
 
     # Create legend, add title, format & show/save graphic
-    plt.title(f"BPC/BNC (Eq. odds) of arnold_nvca \non violent_two_year in {region_name}\n", fontsize=25)
+    plt.title(f"BPC/BNC (Eq. odds) of arnold_nvca \non violent_two_year in {region_name}\n", fontsize=30)
     plt.legend(fontsize=20)
 
     if save_path is not None: 
