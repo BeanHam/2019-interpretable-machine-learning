@@ -47,8 +47,9 @@ def EBM(KY_x, KY_y, FL_x, FL_y, learning_rate, depth, estimators, seed):
         best_param.append(clf.best_params_)
         
         ## best model
-        best_model = clf.fit(outer_train_x, outer_train_y)
-        FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
+        #best_model = clf.fit(outer_train_x, outer_train_y)
+        #FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
+        FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1]))
     
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
@@ -97,8 +98,9 @@ def CART(KY_x, KY_y, FL_x, FL_y, depth, seed):
         best_param.append(clf.best_params_)
         
         ## best model
-        best_model = clf.fit(outer_train_x, outer_train_y)
-        FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
+        #best_model = clf.fit(outer_train_x, outer_train_y)
+        #FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
+        FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1])) 
     
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
