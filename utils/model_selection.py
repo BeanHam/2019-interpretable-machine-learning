@@ -54,8 +54,11 @@ def nested_cross_validate(X, Y, estimator, c_grid, seed, index = None):
         test_x = test_x.drop(['person_id', 'screening_date', 'race'], axis=1).values
         
         ## GridSearch: inner CV
-        clf = GridSearchCV(estimator=estimator, param_grid=c_grid, scoring='roc_auc',
-                           cv=inner_cv, return_train_score=True).fit(train_x, train_y)
+        clf = GridSearchCV(estimator=estimator, 
+                           param_grid=c_grid, 
+                           scoring='roc_auc',
+                           cv=inner_cv, 
+                           return_train_score=True).fit(train_x, train_y)
 
         ## best parameter & scores
         mean_train_score = clf.cv_results_['mean_train_score']
@@ -72,11 +75,13 @@ def nested_cross_validate(X, Y, estimator, c_grid, seed, index = None):
             prob = best_model.predict_proba(test_x)[:, 1]
             holdout_pred = best_model.predict(test_x)
         else:
-            best_model = clf.fit(train_x, train_y)
-            prob = best_model.predict_proba(test_x)[:, 1]
-            holdout_pred = best_model.predict(test_x)
+            #best_model = clf.fit(train_x, train_y)
+            #prob = best_model.predict_proba(test_x)[:, 1]
+            #holdout_pred = best_model.predict(test_x)
+            prob = clf.predict_proba(test_x)[:, 1]
+            holdout_pred = clf.predict(test_x)
         
-        ########################
+        ########################################################################
         ## confusion matrix stats
         confusion_matrix_fairness = compute_confusion_matrix_stats(df=holdout_with_attrs,
                                                                    preds=holdout_pred,
@@ -84,7 +89,7 @@ def nested_cross_validate(X, Y, estimator, c_grid, seed, index = None):
         cf_final = confusion_matrix_fairness.assign(fold_num = [i]*confusion_matrix_fairness['Attribute'].count())
         confusion_matrix_rets.append(cf_final)
         
-        ########################
+        ########################################################################
         ## calibration
         calibration = compute_calibration_fairness(df=holdout_with_attrs, 
                                                    probs=prob, 
@@ -93,7 +98,7 @@ def nested_cross_validate(X, Y, estimator, c_grid, seed, index = None):
         calibration_final = calibration.assign(fold_num = [i]*calibration['Attribute'].count())
         calibrations.append(calibration_final)
         
-        ########################
+        ########################################################################
         ## race auc
         try:
             race_auc_matrix = fairness_in_auc(df = holdout_with_attrs,
@@ -104,7 +109,7 @@ def nested_cross_validate(X, Y, estimator, c_grid, seed, index = None):
         except:
             pass
         
-        ########################
+        ########################################################################
         ## ebm_pn
         no_condition_pn_matrix = balance_positive_negative(df = holdout_with_attrs,
                                                            probs = prob, 
@@ -112,7 +117,7 @@ def nested_cross_validate(X, Y, estimator, c_grid, seed, index = None):
         no_condition_pn_matrix_final = no_condition_pn_matrix.assign(fold_num = [i]*no_condition_pn_matrix['Attribute'].count())
         no_condition_pn.append(no_condition_pn_matrix_final)
         
-        ########################
+        ########################################################################
         ## ebm_condition_pn
         condition_pn_matrix = conditional_balance_positive_negative(df = holdout_with_attrs,
                                                                     probs = prob, 
@@ -120,7 +125,7 @@ def nested_cross_validate(X, Y, estimator, c_grid, seed, index = None):
         condition_pn_matrix_final = condition_pn_matrix.assign(fold_num = [i]*condition_pn_matrix['Attribute'].count())
         condition_pn.append(condition_pn_matrix_final)      
         
-        ########################
+        ########################################################################
         ## store results
         holdout_with_attr_test.append(holdout_with_attrs)
         holdout_probability.append(prob)
