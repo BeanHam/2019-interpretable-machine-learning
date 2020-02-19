@@ -57,8 +57,11 @@ def stump_cv(X, Y, columns, c_grid, seed):
         test_x = test_x.drop(['person_id', 'screening_date', 'race', 'age_at_current_charge', 'p_charges'], axis=1)
         
         ## GridSearch: inner CV
-        clf = GridSearchCV(estimator=lasso, param_grid=c_grid, scoring='roc_auc',
-                           cv=inner_cv, return_train_score=True).fit(train_x, train_y)
+        clf = GridSearchCV(estimator=lasso, 
+                           param_grid=c_grid, 
+                           scoring='roc_auc',
+                           cv=inner_cv, 
+                           return_train_score=True).fit(train_x, train_y)
     
         ## best parameter & scores        
         mean_train_score = clf.cv_results_['mean_train_score']
@@ -68,10 +71,12 @@ def stump_cv(X, Y, columns, c_grid, seed):
         validation_auc.append(clf.best_score_)
         auc_diffs.append(mean_train_score[np.where(mean_test_score == clf.best_score_)[0][0]] - clf.best_score_)
         
-        
         ## run model with best parameter
-        best_model = LogisticRegression(class_weight = 'balanced', solver='liblinear', 
-                                        random_state=seed, penalty='l1', C=best_param['C']).fit(train_x, train_y)
+        best_model = LogisticRegression(class_weight = 'balanced', 
+                                        solver='liblinear', 
+                                        random_state=seed, 
+                                        penalty='l1', 
+                                        C=best_param['C']).fit(train_x, train_y)
         coefs = best_model.coef_[best_model.coef_ != 0]
         features = columns[best_model.coef_[0] != 0].tolist()
         intercept = best_model.intercept_[0]
@@ -254,7 +259,7 @@ def stump_plots(features, coefs, indicator):
             ## sanity check
             if len(sub_features) == 1:
                 cutoffs.append(int(sub_features[0][sub_features[0].find(label)+len(label):]))
-                cutoff_values.append(coefs[np.where(np.array(features) == sub_features[0])[0][0]])
+                cutoff_values.append( coefs[np.where(np.array(features) == sub_features[0])[0][0]] )
                 
                 ## prepare values
                 cutoff_prep.append(np.linspace(18, cutoffs[0]+0.5, 1000))
@@ -313,7 +318,7 @@ def stump_plots(features, coefs, indicator):
                 for j in sub_features:
                     cutoff_values.append(coefs[np.where(np.array(features) == j)[0][0]])
                     cutoffs.append(int(j[j.find(label)+len(label):])) 
-                
+    
                 ## prepare cutoff values for plots
                 cutoff_prep = []
                 cutoff_values_prep = []
@@ -329,8 +334,6 @@ def stump_plots(features, coefs, indicator):
                 unique_len = len(unique)
                 plt.figure(figsize=(4,3))
                 plt.scatter(cutoff_prep, cutoff_values_prep, s=0.05)
-                #for m in range(1, unique_len):
-                #    plt.vlines(x=cutoffs[m]-0.5, ymin=unique[m], ymax=unique[m-1], colors = "C0", linestyles='dashed')
                 plt.title(label, fontsize=14)
                 plt.ylabel('Contribution', fontsize=14)
                 plt.show()  
@@ -346,12 +349,15 @@ def stump_plots(features, coefs, indicator):
         labels = ['sex', 'age_at_current_charge', 'p_arrest', 'p_charges', 'p_violence', 'p_felony', 'p_incarceration',
                   'p_misdemeanor', 'p_property','p_murder', 'p_assault', 'p_sex_offense', 'p_weapon', 'p_felprop_viol', 
                   'p_felassault', 'p_misdeassult', 'p_traffic', 'p_drug', 'p_dui', 'p_stalking', 'p_voyeurism', 'p_fraud', 
-                  'p_stealing', 'p_trespass', 'ADE', 'Treatment', 'p_incarceration' 'p_fta_two_year', 'fta_two_year_plus', 
+                  'p_stealing', 'p_trespass', 'ADE', 'Treatment', 'p_incarceration' 'p_fta_two_year', 'p_fta_two_year_plus', 
                   'p_pending_charge', 'p_probation', 'six_month', 'one_year', 'three_year', 'five_year', 'current_violence', 
                   'current_pending_charge', 'current_violence20']
     
     for i in labels:
-        sub_features = np.array(np.array(features)[[i in k for k in features]])
+        if i == 'p_fta_two_year':
+            sub_features = np.array(np.array(features)[[i in k for k in features]])[:-1]
+        else:
+            sub_features = np.array(np.array(features)[[i in k for k in features]])
         if len(sub_features) == 0:
             continue
         stump_visulization(i, sub_features, features, coefs)
