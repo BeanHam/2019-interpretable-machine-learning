@@ -1,0 +1,75 @@
+---
+title: "broward clean"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(lubridate)
+library(stringr)
+```
+
+```{r}
+disposition = read.csv("dispositions.csv")
+```
+
+__NOTE__:
+
+These are key words to detect convicted charges:
+
+ - convicted charges: convicted; pursuant; Viol-Conv; 
+ 
+ - non-convicted: dismissed; nolle prosequi; acquitted; no action taken; vacate; dismissal; 
+                  discharged; no information
+
+
+
+```{r}
+convictions<-disposition %>%
+  mutate(Description = str_to_lower(Description),
+         JudgementDate = as.character(JudgementDate),
+         OffenseDate=ymd(OffenseDate),
+         Description=as.character(Description),
+         convicted=case_when(
+           str_detect(Description,coll("Nolle Prosequi",T,ignore_case=T))~0,
+           str_detect(Description,coll("vacate",T,ignore_case=T))~0,
+           str_detect(Description,coll("dismissed",T,ignore_case=T))~0,
+           str_detect(Description,coll("acquitted",T,ignore_case=T))~0,
+           str_detect(Description,coll("no action taken",T,ignore_case=T))~0,
+           str_detect(Description,coll("dismissal",T,ignore_case=T))~0,
+           str_detect(Description,coll("discharged",T,ignore_case=T))~0,
+           str_detect(Description,coll("convicted",T,ignore_case=T))~1,
+           str_detect(Description,coll("pursuant",T,ignore_case=T))~1,
+           str_detect(Description,coll("viol-conv",T,ignore_case=T))~1,
+           TRUE~0
+           )
+         ) 
+
+
+#%>%
+#  group_by(person_id,case_number,Charge)%>%
+#  filter(JudgementDate==max(JudgementDate))%>%
+#  summarise(
+#    JudgementDate=max(JudgementDate),
+#    OffenseDate=max(OffenseDate),
+#    convicted=case_when((
+#      "Y" %in% convicted & "N" %in% convicted)~0,
+#      ("Y" %in% convicted) ~ 1,
+#      TRUE~0))
+```
+
+```{r}
+write.csv(convictions, file = "convicted_charges.csv", row.names = FALSE)
+```
+
+
+
+
+
+
+
+
