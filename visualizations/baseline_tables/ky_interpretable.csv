@@ -1,61 +1,61 @@
 Problem,Performance,Model,Time
-General,0.737,CART,Two Year
-General,0.741,EBM,Two Year
-General,0.739,Additive Stumps,Two Year
-General,0.697,RiskSLIM,Two Year
-General,0.692,Arnold PSA,Two Year
-Violent,0.767,CART,Two Year
-Violent,0.778,EBM,Two Year
-Violent,0.773,Additive Stumps,Two Year
-Violent,0.742,RiskSLIM,Two Year
+General,0.746,CART,Two Year
+General,0.751,EBM,Two Year
+General,0.748,Additive Stumps,Two Year
+General,0.708,RiskSLIM,Two Year
+General,0.711,Arnold PSA,Two Year
+Violent,0.763,CART,Two Year
+Violent,0.777,EBM,Two Year
+Violent,0.77,Additive Stumps,Two Year
+Violent,0.744,RiskSLIM,Two Year
 Violent,0.743,Arnold PSA,Two Year
-Drug,0.729,CART,Two Year
-Drug,0.733,EBM,Two Year
-Drug,0.731,Additive Stumps,Two Year
-Drug,0.681,RiskSLIM,Two Year
+Drug,0.736,CART,Two Year
+Drug,0.74,EBM,Two Year
+Drug,0.738,Additive Stumps,Two Year
+Drug,0.708,RiskSLIM,Two Year
 Drug,0,Arnold PSA,Two Year
-Property,0.788,CART,Two Year
-Property,0.794,EBM,Two Year
-Property,0.793,Additive Stumps,Two Year
-Property,0.759,RiskSLIM,Two Year
+Property,0.79,CART,Two Year
+Property,0.798,EBM,Two Year
+Property,0.796,Additive Stumps,Two Year
+Property,0.761,RiskSLIM,Two Year
 Property,0,Arnold PSA,Two Year
-Felony,0.762,CART,Two Year
-Felony,0.769,EBM,Two Year
-Felony,0.765,Additive Stumps,Two Year
-Felony,0.736,RiskSLIM,Two Year
+Felony,0.771,CART,Two Year
+Felony,0.776,EBM,Two Year
+Felony,0.773,Additive Stumps,Two Year
+Felony,0.757,RiskSLIM,Two Year
 Felony,0,Arnold PSA,Two Year
-Misdemeanor,0.72,CART,Two Year
-Misdemeanor,0.726,EBM,Two Year
-Misdemeanor,0.721,Additive Stumps,Two Year
-Misdemeanor,0.677,RiskSLIM,Two Year
+Misdemeanor,0.73,CART,Two Year
+Misdemeanor,0.735,EBM,Two Year
+Misdemeanor,0.729,Additive Stumps,Two Year
+Misdemeanor,0.701,RiskSLIM,Two Year
 Misdemeanor,0,Arnold PSA,Two Year
-General,0.762,CART,Six Month
-General,0.763,EBM,Six Month
-General,0.762,Additive Stumps,Six Month
-General,0.722,RiskSLIM,Six Month
-General,0.697,Arnold PSA,Six Month
-Violent,0.824,CART,Six Month
-Violent,0.844,EBM,Six Month
-Violent,0.841,Additive Stumps,Six Month
-Violent,0.811,RiskSLIM,Six Month
-Violent,0.793,Arnold PSA,Six Month
-Drug,0.788,CART,Six Month
-Drug,0.788,EBM,Six Month
-Drug,0.79,Additive Stumps,Six Month
-Drug,0.757,RiskSLIM,Six Month
+General,0.772,CART,Six Month
+General,0.773,EBM,Six Month
+General,0.771,Additive Stumps,Six Month
+General,0.737,RiskSLIM,Six Month
+General,0.718,Arnold PSA,Six Month
+Violent,0.822,CART,Six Month
+Violent,0.843,EBM,Six Month
+Violent,0.836,Additive Stumps,Six Month
+Violent,0.81,RiskSLIM,Six Month
+Violent,0.794,Arnold PSA,Six Month
+Drug,0.794,CART,Six Month
+Drug,0.793,EBM,Six Month
+Drug,0.796,Additive Stumps,Six Month
+Drug,0.763,RiskSLIM,Six Month
 Drug,0,Arnold PSA,Six Month
-Property,0.833,CART,Six Month
-Property,0.845,EBM,Six Month
-Property,0.847,Additive Stumps,Six Month
-Property,0.823,RiskSLIM,Six Month
+Property,0.839,CART,Six Month
+Property,0.85,EBM,Six Month
+Property,0.851,Additive Stumps,Six Month
+Property,0.832,RiskSLIM,Six Month
 Property,0,Arnold PSA,Six Month
-Felony,0.802,CART,Six Month
-Felony,0.813,EBM,Six Month
-Felony,0.804,Additive Stumps,Six Month
-Felony,0.778,RiskSLIM,Six Month
+Felony,0.811,CART,Six Month
+Felony,0.82,EBM,Six Month
+Felony,0.813,Additive Stumps,Six Month
+Felony,0.79,RiskSLIM,Six Month
 Felony,0,Arnold PSA,Six Month
-Misdemeanor,0.747,CART,Six Month
-Misdemeanor,0.748,EBM,Six Month
-Misdemeanor,0.743,Additive Stumps,Six Month
-Misdemeanor,0.695,RiskSLIM,Six Month
+Misdemeanor,0.76,CART,Six Month
+Misdemeanor,0.757,EBM,Six Month
+Misdemeanor,0.751,Additive Stumps,Six Month
+Misdemeanor,0.705,RiskSLIM,Six Month
 Misdemeanor,0,Arnold PSA,Six Month
