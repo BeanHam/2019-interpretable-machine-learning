@@ -198,10 +198,7 @@ fta <-  data_before%>%
           summarise(fail_appear_two_yr=sum(fail_appear_two_yr),
                     fail_appear_two_plus=sum(fail_appear_two_plus))%>%
         mutate(screening_date = as.Date(screening_date)) #cast back to date type 
-        
-
-# rm(fta_subset,fta_prob)
-  
+    
 ```
 
 Merging tables above for a complete PSA features table. 

@@ -1,7 +1,7 @@
-,Model,Label,Afr-Am.,Cauc.,Other Race,race\_range,Female,Male,sex\_range
-0,Arnold NCA,general\_two\_year,0.673,0.694,0.634,0.061,0.692,0.692,0.0
-1,Arnold NVCA Raw,violent\_two\_year,0.727,0.741,0.8,0.072,0.729,0.734,0.005
-0,EBM,general\_two\_year,0.731,0.742,0.692,0.049,0.731,0.745,0.013
-1,EBM,violent\_two\_year,0.775,0.771,0.797,0.026,0.746,0.767,0.021
-0,RiskSLIM,general\_two\_year,0.693,0.697,0.611,0.086,0.685,0.702,0.017
-1,RiskSLIM,violent\_two\_year,0.743,0.735,0.694,0.049,0.699,0.728,0.028
+,Model,Label,Afr-Am.,Cauc.,Other Race,race_range,Female,Male,sex_range
+0,Arnold NCA Raw,general\_two\_year,0.692,0.713,0.653,0.059,0.714,0.709,0.005
+1,Arnold NVCA Raw,violent\_two\_year,0.728,0.74,0.767,0.039,0.728,0.734,0.006
+0,EBM,general\_two\_year,0.742,0.751,0.696,0.055,0.745,0.753,0.008
+1,EBM,violent\_two\_year,0.775,0.77,0.766,0.009,0.744,0.766,0.022
+0,RiskSLIM,general\_two\_year,0.705,0.708,0.62,0.088,0.699,0.712,0.013
+1,RiskSLIM,violent\_two\_year,0.744,0.736,0.68,0.063,0.706,0.73,0.024
