@@ -72,6 +72,7 @@ def XGB(KY_x, KY_y, FL_x, FL_y, learning_rate, depth, estimators, gamma, child_w
 def RF(KY_x, KY_y, FL_x, FL_y, depth, estimators,impurity, seed):
 
     KY_score = []
+    FL_score = [] ## FL test
     FL_validation = []
     auc_diff = []
     best_param = []
@@ -123,6 +124,7 @@ def RF(KY_x, KY_y, FL_x, FL_y, depth, estimators,impurity, seed):
 def LinearSVM(KY_x, KY_y, FL_x, FL_y, C, seed):
 
     KY_score = []
+    FL_score = [] ## FL test
     FL_validation = []
     auc_diff = []
     best_param = []
@@ -175,6 +177,7 @@ def LinearSVM(KY_x, KY_y, FL_x, FL_y, C, seed):
 def Lasso(KY_x, KY_y, FL_x, FL_y, C, seed):
     
     KY_score = []
+    FL_score = [] ## FL test
     FL_validation = []
     auc_diff = []
     best_param = []
@@ -224,6 +227,7 @@ def Lasso(KY_x, KY_y, FL_x, FL_y, C, seed):
 def Logistic(KY_x, KY_y, FL_x, FL_y, C, seed):
     
     KY_score = []
+    FL_score = [] ## FL test
     FL_validation = []
     auc_diff = []
     best_param = []
