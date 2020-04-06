@@ -13,6 +13,7 @@ from sklearn.calibration import CalibratedClassifierCV
 def XGB(KY_x, KY_y, FL_x, FL_y, learning_rate, depth, estimators, seed):
     
     KY_validation = []
+    KY_score = []
     FL_score = []
     auc_diff = []
     best_param = []
@@ -51,13 +52,13 @@ def XGB(KY_x, KY_y, FL_x, FL_y, learning_rate, depth, estimators, seed):
         best_param.append(clf.best_params_)
         
         ## best model
-        #best_model = clf.fit(outer_train_x, outer_train_y)
-        #FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
         FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1])) 
+        KY_score.append(roc_auc_score(outer_test_y, clf.predict_proba(outer_test_x)[:,1])) 
     
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
             'KY_validation': KY_validation,
+            'KY_score': KY_score,
             'FL_score':FL_score}
 
 
@@ -66,6 +67,7 @@ def XGB(KY_x, KY_y, FL_x, FL_y, learning_rate, depth, estimators, seed):
 def RF(KY_x, KY_y, FL_x, FL_y, depth, estimators, seed):
     
     KY_validation = []
+    KY_score = []
     FL_score = []
     auc_diff = []
     best_param = []
@@ -103,13 +105,13 @@ def RF(KY_x, KY_y, FL_x, FL_y, depth, estimators, seed):
         best_param.append(clf.best_params_)
         
         ## best model
-        #best_model = clf.fit(outer_train_x, outer_train_y)
-        #FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
         FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1]))
+        KY_score.append(roc_auc_score(outer_test_y, clf.predict_proba(outer_test_x)[:,1]))
     
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
             'KY_validation': KY_validation,
+            'KY_score': KY_score,
             'FL_score':FL_score}
 
 
@@ -118,6 +120,7 @@ def RF(KY_x, KY_y, FL_x, FL_y, depth, estimators, seed):
 def LinearSVM(KY_x, KY_y, FL_x, FL_y, C, seed):
 
     KY_validation = []
+    KY_score = []
     FL_score = []
     auc_diff = []
     best_param = []
@@ -155,11 +158,13 @@ def LinearSVM(KY_x, KY_y, FL_x, FL_y, C, seed):
         
         ## best model
         best_model = CalibratedClassifierCV(clf, cv=5).fit(KY_x, KY_y)
-        FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
+        FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1]))
+        KY_score.append(roc_auc_score(outer_test_y, best_model.predict_proba(outer_test_x)[:,1]))
         
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
             'KY_validation': KY_validation,
+            'KY_score': KY_score,
             'FL_score':FL_score}
 
 
@@ -167,6 +172,7 @@ def LinearSVM(KY_x, KY_y, FL_x, FL_y, C, seed):
 def Lasso(KY_x, KY_y, FL_x, FL_y, C, seed):
 
     KY_validation = []
+    KY_score = []
     FL_score = []
     auc_diff = []
     best_param = []
@@ -203,13 +209,13 @@ def Lasso(KY_x, KY_y, FL_x, FL_y, C, seed):
         best_param.append(clf.best_params_)
         
         ## best model
-        #best_model = clf.fit(outer_train_x, outer_train_y)
-        #FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
-        FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1])) 
+        FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1]))
+        KY_score.append(roc_auc_score(outer_test_y, clf.predict_proba(outer_test_x)[:,1]))
         
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
             'KY_validation': KY_validation,
+            'KY_score': KY_score,
             'FL_score':FL_score}
 
 
@@ -218,6 +224,7 @@ def Lasso(KY_x, KY_y, FL_x, FL_y, C, seed):
 def Logistic(KY_x, KY_y, FL_x, FL_y, C, seed):
 
     KY_validation = []
+    KY_score = []
     FL_score = []
     auc_diff = []
     best_param = []
@@ -254,11 +261,11 @@ def Logistic(KY_x, KY_y, FL_x, FL_y, C, seed):
         best_param.append(clf.best_params_)
         
         ## best model
-        #best_model = clf.fit(outer_train_x, outer_train_y)
-        #FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
         FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1])) 
+        KY_score.append(roc_auc_score(outer_test_y, clf.predict_proba(outer_test_x)[:,1]))
         
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
             'KY_validation': KY_validation,
+            'KY_score': KY_score,
             'FL_score':FL_score}
