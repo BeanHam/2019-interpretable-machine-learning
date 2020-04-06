@@ -1,6 +1,8 @@
 ,Attribute,Attribute Value,n_inds,% total
-0,race,African-American,37936,17.02
-1,race,Caucasian,179871,80.71
-2,race,Other,5062,2.27
-3,sex,female,69106,31.01
-4,sex,male,153763,68.99
+0,race,Asian,843,0.34
+1,race,Black,42197,16.83
+2,race,Indian,195,0.08
+3,race,Race Unknown,5202,2.07
+4,race,White,202341,80.69
+5,sex,0,79207,31.58
+6,sex,1,171571,68.42
