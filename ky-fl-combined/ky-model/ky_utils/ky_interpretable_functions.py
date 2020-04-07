@@ -9,6 +9,7 @@ from sklearn.metrics import roc_auc_score
 def EBM(KY_x, KY_y, FL_x, FL_y, learning_rate, depth, estimators, seed):
 
     KY_validation = []
+    KY_score = []
     FL_score = []
     auc_diff = []
     best_param = []
@@ -47,13 +48,13 @@ def EBM(KY_x, KY_y, FL_x, FL_y, learning_rate, depth, estimators, seed):
         best_param.append(clf.best_params_)
         
         ## best model
-        #best_model = clf.fit(outer_train_x, outer_train_y)
-        #FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
         FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1]))
+        KY_score.append(roc_auc_score(outer_test_y, clf.predict_proba(outer_test_x)[:,1]))
     
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
             'KY_validation': KY_validation,
+            'KY_score': KY_score,
             'FL_score':FL_score}
 
 
@@ -62,6 +63,7 @@ def EBM(KY_x, KY_y, FL_x, FL_y, learning_rate, depth, estimators, seed):
 def CART(KY_x, KY_y, FL_x, FL_y, depth, seed):
  
     KY_validation = []
+    KY_score = []
     FL_score = []
     auc_diff = []
     best_param = []
@@ -98,11 +100,11 @@ def CART(KY_x, KY_y, FL_x, FL_y, depth, seed):
         best_param.append(clf.best_params_)
         
         ## best model
-        #best_model = clf.fit(outer_train_x, outer_train_y)
-        #FL_score.append(roc_auc_score(FL_y, best_model.predict_proba(FL_x)[:,1])) 
         FL_score.append(roc_auc_score(FL_y, clf.predict_proba(FL_x)[:,1])) 
+        KY_score.append(roc_auc_score(outer_test_y, clf.predict_proba(outer_test_x)[:,1]))
     
     return {'auc_diff':auc_diff, 
             'best_param':best_param, 
             'KY_validation': KY_validation,
+            'KY_score': KY_score,
             'FL_score':FL_score}

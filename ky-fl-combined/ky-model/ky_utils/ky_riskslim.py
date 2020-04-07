@@ -143,6 +143,7 @@ def risk_cv(KY_x, KY_y, FL_x, FL_y,
             seed):
     
     FL_score = []
+    KY_score = []
     KY_validation = []
     
     ## set up basic values
@@ -217,11 +218,18 @@ def risk_cv(KY_x, KY_y, FL_x, FL_y,
                                                     max_offset = max_offset)
         print_model(model_info['solution'], new_train_data)          
     
-        ## change data format
+        ## FL_score
         FL_prob = riskslim_prediction(FL_x, np.array(cols), model_info).reshape(-1,1)
-        FL_score.append(roc_auc_score(FL_y, FL_prob)) 
+        FL_score.append(roc_auc_score(FL_y, FL_prob))
+        
+        ## KY score
+        outer_test_x = outer_test_x.values
+        outer_test_y[outer_test_y == -1] = 0 ## change -1 to 0
+        KY_prob = riskslim_prediction(outer_test_x, np.array(cols), model_info).reshape(-1,1)
+        KY_score.append(roc_auc_score(outer_test_y, KY_prob))  
         
     return {'FL_score': FL_score,
+            'KY_score': KY_score,
             'KY_validation': KY_validation}
 
     
