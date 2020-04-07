@@ -7,6 +7,7 @@ from sklearn.metrics import roc_auc_score
 def stump_cv(KY_x, KY_y,FL_x, FL_y, columns, c_grid, seed):
 
     FL_score = []
+    KY_score = []
     KY_validation = []
     auc_diff = []
     best_param = []
@@ -62,12 +63,21 @@ def stump_cv(KY_x, KY_y,FL_x, FL_y, columns, c_grid, seed):
             test_values = FL_x[k]*(lasso_dict[k])
             prob += test_values
         holdout_prob = np.exp(prob)/(1+np.exp(prob)) 
-        FL_score.append(roc_auc_score(FL_y, holdout_prob))     
+        FL_score.append(roc_auc_score(FL_y, holdout_prob))        
+        
+        ## prediction on test set -- KY_X
+        prob = 0
+        for k in features:
+            test_values = outer_test_x[k]*(lasso_dict[k])
+            prob += test_values
+        holdout_prob = np.exp(prob)/(1+np.exp(prob)) 
+        KY_score.append(roc_auc_score(outer_test_y, holdout_prob))
         
     return {'best_params': best_param,
             'dictionary': lasso_dict,
             'auc_diff': auc_diff,
             'KY_validation':KY_validation,
+            'KY_score': KY_score,
             'FL_score': FL_score}
 
 

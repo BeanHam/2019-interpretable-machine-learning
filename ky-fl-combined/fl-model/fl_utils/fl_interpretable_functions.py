@@ -66,6 +66,7 @@ def CART(KY_x, KY_y, FL_x, FL_y, depth, impurity, seed):
 
     KY_score = []
     FL_validation = []
+    FL_score = []
     auc_diff = []
     best_param = []
     KY_x = KY_x.drop(['person_id'], axis=1)
