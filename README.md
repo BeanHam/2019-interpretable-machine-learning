@@ -1,6 +1,7 @@
 # In Pursuit of Interpretable, Fair and Accurate Machine Learning for Criminal Recidivism Prediction
 
 ![alt text](https://github.com/BeanHam/interpretable-machine-learning/blob/master/visualizations/baseline_tables/comb_baseline.png)
+![alt text](https://github.com/BeanHam/interpretable-machine-learning/blob/master/visualizations/baseline_tables/comb_interpretable.png)
 
 This repository is for our paper "[In Pursuit of Interpretable, Fair and Accurate Machine Learning for Criminal Recidivism Prediction](https://arxiv.org/pdf/2005.04176.pdf)".
 
