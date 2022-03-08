@@ -8,7 +8,7 @@ This repository is for our paper "[In Pursuit of Interpretable, Fair and Accurat
 We study interpretable recidivism prediction using machine learning (ML) models and analyze performance in terms of prediction ability, sparsity, and fairness. Unlike previous works, this study trains interpretable models that output probabilities rather than binary predictions, and uses quantitative fairness definitions to assess the models. This study also examines whether models can generalize across geographic locations. We found out that interpretable machine learning models can perform just as well as non-interpretable methods and currently-used risk assessment scales, in terms of both prediction accuracy and fairness. Machine learning models might be more accurate when trained separately for distinct locations and kept up-to-date.
 
 ## Broward
-Broward county data is publicly available and you can access the data under folder  ```+green+```
+Broward county data is publicly available and you can access the data under folder  ```+ green +```
 
 ## Kentucky
 Kentucky criminal data is NOT publicly available, but can be accessed through a special data request to the Kentucky Department of Shared Services, Research and Statistics. 
