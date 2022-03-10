@@ -14,5 +14,6 @@ We study interpretable recidivism prediction using machine learning (ML) models 
 
 ## Kentucky
 Kentucky criminal data is NOT publicly available, but can be accessed through a special data request to the Kentucky Department of Shared Services, Research and Statistics. 
+- Once you requested the data, you can run the three R scripts under ```/kentucky/data-processing/``` to generate the data we used.
 - Notebooks used to train baseline models are under folder ```/kentucky/baselines/```
 - Notebooks used to train interpretable models are under folder ```/kentucky/interpretable/```
